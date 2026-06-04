@@ -28,7 +28,14 @@ use App\Http\Controllers\LedgerController;
 
 Route::post('/login', [AuthController::class, 'login']);
 
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware(['auth:sanctum', function ($request, $next) {
+    // Auto-update Arrears daily if late
+    \App\Models\LoanSchedule::where('due_date', '<', now()->toDateString())
+        ->whereIn('status', ['Pending', 'Partial'])
+        ->update(['status' => 'Arrears']);
+
+    return $next($request);
+}])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/user', [AuthController::class, 'user']);
     Route::put('/profile', [UserController::class, 'updateProfile']);
