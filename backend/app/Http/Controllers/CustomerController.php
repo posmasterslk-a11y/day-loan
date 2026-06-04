@@ -9,10 +9,19 @@ class CustomerController extends Controller
 {
     public function index()
     {
-        $customers = Customer::orderBy('id', 'desc')->get();
-        // Return matching structure to frontend: avatar, id, name, email, location, status
-        // Since we don't have email/location in our DB, we'll map them appropriately
+        $customers = Customer::with(['loans.schedules' => function ($q) {
+            $q->where('status', 'Arrears');
+        }])->orderBy('id', 'desc')->get();
+        
         return response()->json($customers->map(function ($c) {
+            $maxArrearsDays = 0;
+            foreach ($c->loans as $loan) {
+                $arrearsCount = $loan->schedules->count();
+                if ($arrearsCount > $maxArrearsDays) {
+                    $maxArrearsDays = $arrearsCount;
+                }
+            }
+
             return [
                 'db_id' => $c->id,
                 'id' => $c->customer_id, 
@@ -28,7 +37,8 @@ class CustomerController extends Controller
                 'business_type' => $c->business_type,
                 'monthly_income' => $c->monthly_income,
                 'status' => $c->status ? strtolower($c->status) : 'active',
-                'avatar' => ['src' => $c->photo_path ? asset('storage/' . $c->photo_path) : '']
+                'avatar' => ['src' => $c->photo_path ? asset('storage/' . $c->photo_path) : ''],
+                'is_7_days_arrears' => $maxArrearsDays >= 7
             ];
         }));
     }

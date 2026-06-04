@@ -96,14 +96,16 @@ const schema = z.object({
   customer_id: z.number({ required_error: 'Customer is required' }),
   loan_product_id: z.number({ required_error: 'Loan Product is required' }),
   amount: z.number().min(1, 'Amount must be greater than 0'),
-  guarantor_id: z.number().optional()
+  guarantor_id: z.number().optional(),
+  start_date: z.string().optional()
 })
 
 const state = reactive({
   customer_id: undefined,
   loan_product_id: undefined,
   amount: 0,
-  guarantor_id: undefined
+  guarantor_id: undefined,
+  start_date: new Date().toISOString().split('T')[0]
 })
 
 const isModalOpen = ref(false)
@@ -195,6 +197,10 @@ async function approveLoan(id: number) {
           
           <UFormField label="Loan Amount" name="amount" :help="selectedProduct ? `Must be between ${selectedProduct.min_amount} and ${selectedProduct.max_amount}` : ''">
             <UInput v-model="state.amount" type="number" class="w-full" />
+          </UFormField>
+
+          <UFormField label="Issue Date" name="start_date">
+            <UInput v-model="state.start_date" type="date" class="w-full" />
           </UFormField>
           
           <UFormField label="Select Guarantor (Optional)" name="guarantor_id">

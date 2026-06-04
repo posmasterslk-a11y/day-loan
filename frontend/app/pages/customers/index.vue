@@ -363,10 +363,16 @@ const pagination = ref({
           base: 'table-fixed border-separate border-spacing-0',
           thead: '[&>tr]:bg-elevated/50 [&>tr]:after:content-none',
           tbody: '[&>tr]:last:[&>td]:border-b-0',
+          tr: {
+            base: '',
+            active: 'hover:bg-gray-50 dark:hover:bg-gray-800/50',
+            selected: 'bg-gray-50 dark:bg-gray-800/50',
+          },
           th: 'py-2 first:rounded-l-lg last:rounded-r-lg border-y border-default first:border-l last:border-r',
           td: 'border-b border-default',
           separator: 'h-0'
         }"
+        :row-class="(row) => row.original.is_7_days_arrears ? 'bg-red-50 dark:bg-red-900/20' : ''"
       />
 
       <div class="flex items-center justify-between gap-3 border-t border-default pt-4 mt-auto">

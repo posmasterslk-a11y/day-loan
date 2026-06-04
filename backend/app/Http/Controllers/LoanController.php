@@ -22,6 +22,7 @@ class LoanController extends Controller
             'loan_product_id' => 'required|exists:loan_products,id',
             'amount' => 'required|numeric|min:0',
             'guarantor_id' => 'nullable|exists:guarantors,id',
+            'start_date' => 'nullable|date',
         ]);
 
         $product = LoanProduct::findOrFail($data['loan_product_id']);
@@ -34,6 +35,8 @@ class LoanController extends Controller
         $totalPayable = $data['amount'] + $interestAmount;
         $dailyInstallment = $totalPayable / $product->duration_days;
 
+        $startDate = !empty($data['start_date']) ? Carbon::parse($data['start_date']) : Carbon::today();
+
         $loan = Loan::create([
             'loan_number' => 'LN-' . time(),
             'customer_id' => $data['customer_id'],
@@ -41,7 +44,7 @@ class LoanController extends Controller
             'guarantor_id' => $data['guarantor_id'] ?? null,
             'amount' => $data['amount'],
             'interest_rate' => $product->interest_rate,
-            'start_date' => Carbon::today(),
+            'start_date' => $startDate->toDateString(),
             'term_days' => $product->duration_days,
             'total_payable' => $totalPayable,
             'daily_installment' => $dailyInstallment,
@@ -52,7 +55,7 @@ class LoanController extends Controller
         for ($i = 1; $i <= $product->duration_days; $i++) {
             LoanSchedule::create([
                 'loan_id' => $loan->id,
-                'due_date' => Carbon::today()->addDays($i),
+                'due_date' => $startDate->copy()->addDays($i)->toDateString(),
                 'amount_due' => $dailyInstallment,
                 'status' => 'Pending',
             ]);
