@@ -51,6 +51,12 @@ const stats = computed<Stat[]>(() => {
       variation: 0
     },
     {
+      title: 'Total Arrears (Due)',
+      icon: 'i-lucide-alert-triangle',
+      value: formatCurrency(dbStats.value.total_arrears || 0),
+      variation: 0
+    },
+    {
       title: 'Loans Issued (This Month)',
       icon: 'i-lucide-calendar-plus',
       value: dbStats.value.loans_this_month || 0,
