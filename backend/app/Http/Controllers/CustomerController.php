@@ -87,7 +87,7 @@ class CustomerController extends Controller
         $customer = Customer::findOrFail($id);
         
         $loans = \App\Models\Loan::with(['schedules', 'payments' => function($q) {
-            $q->orderBy('payment_date', 'asc');
+            $q->with('officer')->orderBy('created_at', 'asc');
         }])->where('customer_id', $customer->id)
           ->orderBy('created_at', 'desc')
           ->get();

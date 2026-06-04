@@ -35,15 +35,31 @@ const currentBalance = computed(() => parseFloat(loan.value?.total_payable || 0)
 const totalPayable = computed(() => currentBalance.value + paidAmount.value)
 const progress = computed(() => totalPayable.value ? (paidAmount.value / totalPayable.value) * 100 : 0)
 
+const paymentsWithBalance = computed(() => {
+  if (!loan.value || !loan.value.payments) return []
+  let balance = totalPayable.value
+  return loan.value.payments.map((p: any) => {
+    balance -= parseFloat(p.amount || 0)
+    return {
+      ...p,
+      time: new Date(p.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      collector_name: p.officer ? p.officer.name : 'System',
+      running_balance: balance.toFixed(2)
+    }
+  })
+})
+
 const paymentColumns = [
   { accessorKey: 'payment_date', header: 'Date' },
+  { accessorKey: 'time', header: 'Time' },
   { accessorKey: 'amount', header: 'Amount (Rs)' },
-  { accessorKey: 'status', header: 'Status' }
+  { accessorKey: 'collector_name', header: 'Collector' },
+  { accessorKey: 'running_balance', header: 'Balance (Rs)' }
 ]
 
 function getScheduleColor(status: string) {
   if (status === 'Paid') return 'bg-emerald-50 text-emerald-600 border-emerald-200'
-  if (status === 'Arrears') return 'bg-red-50 text-red-600 border-red-200'
+  if (status === 'Missed' || status === 'Arrears') return 'bg-red-50 text-red-600 border-red-200'
   if (status === 'Partial') return 'bg-amber-50 text-amber-600 border-amber-200'
   return 'bg-white text-gray-400 border-gray-200'
 }
@@ -57,7 +73,7 @@ function getScheduleColor(status: string) {
       </template>
     </UDashboardNavbar>
     
-    <UDashboardPanelContent class="bg-gray-50/50 p-6 lg:p-10">
+    <UDashboardPanelContent class="bg-gray-50/50 p-6 lg:p-10 overflow-y-auto flex-1 h-[calc(100vh-64px)] pb-24">
       
       <div v-if="!customer && status === 'pending'" class="flex items-center justify-center h-64">
          <UIcon name="i-lucide-loader-2" class="w-8 h-8 animate-spin text-gray-400" />
@@ -201,7 +217,7 @@ function getScheduleColor(status: string) {
                  <div class="p-6 border-b border-gray-100">
                     <h3 class="font-semibold text-gray-900 text-lg">Payment Receipts</h3>
                  </div>
-                 <UTable :data="payments" :columns="paymentColumns" :ui="{ th: 'bg-gray-50/80 font-semibold text-gray-600', td: 'py-3' }" />
+                 <UTable :data="paymentsWithBalance" :columns="paymentColumns" :ui="{ th: 'bg-gray-50/80 font-semibold text-gray-600', td: 'py-3' }" />
               </div>
 
            </div>
