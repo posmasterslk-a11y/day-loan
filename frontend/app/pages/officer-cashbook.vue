@@ -62,7 +62,7 @@ async function onSubmitCash() {
   }
 
   try {
-    await $fetch(`${config.public.apiBase}/ledger/submit`, {
+    await useApi()(`${config.public.apiBase}/ledger/submit`, {
       method: 'POST',
       body: {
         amount: submitState.amount,

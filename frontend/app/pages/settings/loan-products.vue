@@ -38,7 +38,7 @@ const isModalOpen = ref(false)
 
 async function onSubmit(event: any) {
   try {
-    await $fetch(`${config.public.apiBase}/loan-products`, {
+    await useApi()(`${config.public.apiBase}/loan-products`, {
       method: 'POST',
       body: event.data
     })

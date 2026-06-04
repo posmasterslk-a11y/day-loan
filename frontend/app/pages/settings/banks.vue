@@ -37,7 +37,7 @@ const isModalOpen = ref(false)
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
   try {
-    await $fetch(`${config.public.apiBase}/banks`, {
+    await useApi()(`${config.public.apiBase}/banks`, {
       method: 'POST',
       body: event.data
     })
@@ -55,7 +55,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 async function deleteBank(id: number) {
   if (!confirm('Are you sure you want to delete this bank?')) return;
   try {
-    await $fetch(`${config.public.apiBase}/banks/${id}`, { method: 'DELETE' })
+    await useApi()(`${config.public.apiBase}/banks/${id}`, { method: 'DELETE' })
     toast.add({ title: 'Deleted', description: 'Bank removed.', color: 'success' })
     refresh()
   } catch (error) {

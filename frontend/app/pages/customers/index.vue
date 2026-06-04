@@ -33,7 +33,7 @@ watch(isDetailsSlideoverOpen, (val) => {
 
 async function saveCustomerEdits() {
   try {
-    const res = await $fetch(`${config.public.apiBase}/customers/${selectedCustomerDetails.value.db_id}`, {
+    const res = await useApi()(`${config.public.apiBase}/customers/${selectedCustomerDetails.value.db_id}`, {
       method: 'PUT',
       body: {
          full_name: editState.value.name,

@@ -52,7 +52,7 @@ async function onSubmit(event: any) {
     
     if (fileInputs.value.photo) formData.append('photo', fileInputs.value.photo)
 
-    await $fetch(`${config.public.apiBase}/guarantors`, {
+    await useApi()(`${config.public.apiBase}/guarantors`, {
       method: 'POST',
       body: formData
     })

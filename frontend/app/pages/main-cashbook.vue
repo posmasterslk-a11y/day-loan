@@ -39,7 +39,7 @@ async function onDeposit() {
   }
 
   try {
-    await $fetch(`${config.public.apiBase}/ledger/deposit`, {
+    await useApi()(`${config.public.apiBase}/ledger/deposit`, {
       method: 'POST',
       body: {
         amount: depositState.amount,

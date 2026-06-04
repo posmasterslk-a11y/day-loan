@@ -133,7 +133,7 @@ const calculatedDaily = computed(() => {
 
 async function onSubmit(event: any) {
   try {
-    await $fetch(`${config.public.apiBase}/loans`, {
+    await useApi()(`${config.public.apiBase}/loans`, {
       method: 'POST',
       body: event.data
     })
@@ -147,7 +147,7 @@ async function onSubmit(event: any) {
 
 async function approveLoan(id: number) {
   try {
-    await $fetch(`${config.public.apiBase}/loans/${id}/approve`, {
+    await useApi()(`${config.public.apiBase}/loans/${id}/approve`, {
       method: 'PUT'
     })
     toast.add({ title: 'Success', description: 'Loan approved successfully!', color: 'success' })

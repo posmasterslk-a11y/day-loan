@@ -19,7 +19,7 @@ async function updateAccount() {
   if (!selectedAccount.value.narration) return
 
   try {
-    await $fetch(`${config.public.apiBase}/ledger-accounts/${selectedAccount.value.id}`, {
+    await useApi()(`${config.public.apiBase}/ledger-accounts/${selectedAccount.value.id}`, {
       method: 'PUT',
       body: { narration: selectedAccount.value.narration, type: selectedAccount.value.type }
     })
@@ -35,7 +35,7 @@ async function deleteAccount(id: number) {
   if (!confirm('Are you sure you want to delete this ledger account?')) return
   
   try {
-    await $fetch(`${config.public.apiBase}/ledger-accounts/${id}`, {
+    await useApi()(`${config.public.apiBase}/ledger-accounts/${id}`, {
       method: 'DELETE'
     })
     toast.add({ title: 'Account deleted', color: 'success' })

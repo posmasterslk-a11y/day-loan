@@ -32,7 +32,7 @@ async function submitPayment() {
 
   isLoading.value = true
   try {
-    await $fetch(`${config.public.apiBase}/payments-receipts`, {
+    await useApi()(`${config.public.apiBase}/payments-receipts`, {
       method: 'POST',
       body: state.value
     })

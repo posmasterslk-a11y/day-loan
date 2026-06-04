@@ -64,7 +64,7 @@ async function onSubmit(event: any) {
   }
 
   try {
-    await $fetch(`${config.public.apiBase}/collections`, {
+    await useApi()(`${config.public.apiBase}/collections`, {
       method: 'POST',
       body: {
         loan_schedule_id: selectedSchedule.value.id,

@@ -40,7 +40,7 @@ async function deleteUser() {
   
   try {
     const { token } = useAuth()
-    await $fetch(`${config.public.apiBase}/users/${userToDelete.value}`, {
+    await useApi()(`${config.public.apiBase}/users/${userToDelete.value}`, {
       method: 'DELETE',
       headers: {
         Authorization: `Bearer ${token.value}`
@@ -57,7 +57,7 @@ async function deleteUser() {
 async function onSubmit(event: any) {
   try {
     const { token } = useAuth()
-    await $fetch(`${config.public.apiBase}/users`, {
+    await useApi()(`${config.public.apiBase}/users`, {
       method: 'POST',
       body: event.data,
       headers: {

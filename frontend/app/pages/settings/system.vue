@@ -23,7 +23,7 @@ if (data.value && data.value.default_interest_rate) {
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
   try {
-    await $fetch(`${config.public.apiBase}/settings`, {
+    await useApi()(`${config.public.apiBase}/settings`, {
       method: 'POST',
       body: {
         settings: {

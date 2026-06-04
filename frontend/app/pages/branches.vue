@@ -18,7 +18,7 @@ const isModalOpen = ref(false)
 
 async function onSubmit(event: any) {
   try {
-    await $fetch(`${config.public.apiBase}/branches`, {
+    await useApi()(`${config.public.apiBase}/branches`, {
       method: 'POST',
       body: event.data
     })

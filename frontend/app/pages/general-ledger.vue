@@ -19,7 +19,7 @@ const isLoading = ref(false)
 async function loadLedger() {
   isLoading.value = true
   try {
-    const res = await $fetch<any>(`${config.public.apiBase}/general-ledger`, {
+    const res = await useApi()<any>(`${config.public.apiBase}/general-ledger`, {
       params: {
         from: fromDate.value,
         to: toDate.value,
@@ -47,7 +47,7 @@ async function createLedgerAccount() {
   }
   isCreating.value = true
   try {
-    await $fetch(`${config.public.apiBase}/ledger-accounts`, {
+    await useApi()(`${config.public.apiBase}/ledger-accounts`, {
       method: 'POST',
       body: newAccount.value
     })
