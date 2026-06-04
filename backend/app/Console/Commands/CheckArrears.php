@@ -31,7 +31,7 @@ class CheckArrears extends Command
 
         $updatedCount = \App\Models\LoanSchedule::where('due_date', '<', $today)
             ->whereIn('status', ['Pending', 'Partial'])
-            ->update(['status' => 'Arrears']);
+            ->update(['status' => 'Missed']);
 
         $this->info("Successfully checked and marked {$updatedCount} schedules as Arrears.");
 

@@ -10,7 +10,7 @@ class CustomerController extends Controller
     public function index()
     {
         $customers = Customer::with(['loans.schedules' => function ($q) {
-            $q->where('status', 'Arrears');
+            $q->where('status', 'Missed');
         }])->orderBy('id', 'desc')->get();
         
         return response()->json($customers->map(function ($c) {

@@ -9,13 +9,18 @@ class ArrearsController extends Controller
 {
     public function index(Request $request)
     {
+        // Auto-update Arrears daily if late
+        \App\Models\LoanSchedule::where('due_date', '<', now()->toDateString())
+            ->whereIn('status', ['Pending', 'Partial'])
+            ->update(['status' => 'Missed']);
+
         $officerId = $request->query('officer_id');
 
         $query = Loan::with(['customer', 'product', 'schedules' => function ($q) {
-            $q->where('status', 'Arrears');
+            $q->where('status', 'Missed');
         }])
         ->whereHas('schedules', function ($q) {
-            $q->where('status', 'Arrears');
+            $q->where('status', 'Missed');
         });
 
         if ($officerId) {

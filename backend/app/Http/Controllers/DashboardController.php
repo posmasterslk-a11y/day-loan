@@ -12,6 +12,11 @@ class DashboardController extends Controller
 {
     public function stats()
     {
+        // Auto-update Arrears daily if late
+        \App\Models\LoanSchedule::where('due_date', '<', now()->toDateString())
+            ->whereIn('status', ['Pending', 'Partial'])
+            ->update(['status' => 'Missed']);
+
         $totalCustomers = Customer::count();
         $totalActiveLoans = Loan::where('status', '!=', 'Completed')->count();
         $totalLoanValue = Loan::sum('amount');
@@ -20,9 +25,9 @@ class DashboardController extends Controller
             ->whereIn('status', ['Pending', 'Partial'])
             ->sum('amount_due');
 
-        $todayCollected = Payment::where('payment_date', now()->toDateString())->sum('amount');
+        $todayCollected = \App\Models\Payment::whereDate('payment_date', now()->toDateString())->sum('amount');
         
-        $arrearsSchedules = LoanSchedule::where('status', 'Arrears')->get();
+        $arrearsSchedules = LoanSchedule::where('status', 'Missed')->get();
         $paidAgainstArrears = Payment::whereIn('loan_schedule_id', $arrearsSchedules->pluck('id'))->sum('amount');
         $totalArrears = $arrearsSchedules->sum('amount_due') - $paidAgainstArrears;
         
