@@ -22,6 +22,10 @@ class DashboardController extends Controller
 
         $todayCollected = Payment::where('payment_date', now()->toDateString())->sum('amount');
         
+        $arrearsSchedules = LoanSchedule::where('status', 'Arrears')->get();
+        $paidAgainstArrears = Payment::whereIn('loan_schedule_id', $arrearsSchedules->pluck('id'))->sum('amount');
+        $totalArrears = $arrearsSchedules->sum('amount_due') - $paidAgainstArrears;
+        
         $loansThisMonthData = Loan::whereMonth('created_at', now()->month)
             ->whereYear('created_at', now()->year)
             ->get();
@@ -43,6 +47,7 @@ class DashboardController extends Controller
             'loan_value' => $totalLoanValue,
             'today_expected' => $todayExpected,
             'today_collected' => $todayCollected,
+            'total_arrears' => $totalArrears,
             'loans_this_month' => $loansThisMonth,
             'loan_value_this_month' => $loanValueThisMonth,
             'profit_this_month' => $profitThisMonth,
