@@ -186,7 +186,7 @@ async function approveLoan(id: number) {
 
     <UModal v-model:open="isModalOpen" title="Issue New Loan">
       <template #body>
-        <UForm :schema="schema" :state="state" @submit="onSubmit" class="space-y-4">
+        <UForm :schema="schema" :state="state" @submit="onSubmit" :validate-on="['submit']" class="space-y-4">
           <UFormField label="Select Customer" name="customer_id">
             <USelect v-model="state.customer_id" :items="customers?.map(c => ({ label: c.name + ' ('+c.nic+')', value: c.db_id }))" class="w-full" placeholder="Select a customer..." />
           </UFormField>
