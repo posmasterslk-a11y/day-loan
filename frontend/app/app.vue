@@ -17,8 +17,8 @@ useHead({
   }
 })
 
-const title = 'Micro Finance v1'
-const description = 'Micro Finance System Admin Dashboard'
+const title = 'LoanMaster'
+const description = 'LoanMaster Admin Dashboard'
 
 useSeoMeta({
   title,

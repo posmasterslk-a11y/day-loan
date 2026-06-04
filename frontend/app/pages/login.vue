@@ -44,15 +44,13 @@ const handleLogin = async () => {
 
 <template>
   <div class="animate-in fade-in slide-in-from-bottom-4 duration-700">
-    <div class="mb-10">
-      <div class="inline-flex items-center justify-center p-3 bg-primary/10 rounded-2xl mb-5">
-        <UIcon name="i-lucide-landmark" class="w-8 h-8 text-primary" />
-      </div>
+    <div class="mb-10 text-center flex flex-col items-center">
+      <img src="/logo.png" alt="LoanMaster Logo" class="h-16 mb-6 object-contain" />
       <h2 class="text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white">
-        Welcome back
+        Welcome to LoanMaster
       </h2>
       <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
-        Sign in to access your administrative dashboard.
+        Master Your Lending Business
       </p>
     </div>
 
@@ -80,7 +78,7 @@ const handleLogin = async () => {
     </form>
     
     <div class="mt-12 text-center text-xs text-gray-400 font-medium">
-       &copy; 2026 Micro Finance v1. All rights reserved.
+       &copy; 2026 LoanMaster. All rights reserved.
     </div>
   </div>
 </template>
