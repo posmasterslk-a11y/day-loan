@@ -93,9 +93,9 @@ const columns = [
 ]
 
 const schema = z.object({
-  customer_id: z.number({ required_error: 'Customer is required' }),
-  loan_product_id: z.number({ required_error: 'Loan Product is required' }),
-  amount: z.number().min(1, 'Amount must be greater than 0'),
+  customer_id: z.number({ invalid_type_error: 'Please select a customer' }),
+  loan_product_id: z.number({ invalid_type_error: 'Please select a loan product' }),
+  amount: z.number({ invalid_type_error: 'Amount is required' }).min(1, 'Amount must be greater than 0'),
   guarantor_id: z.number().optional(),
   start_date: z.string().optional()
 })
