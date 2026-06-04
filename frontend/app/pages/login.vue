@@ -80,7 +80,7 @@ const handleLogin = async () => {
     </form>
     
     <div class="mt-12 text-center text-xs text-gray-400 font-medium">
-       &copy; 2026 Microfinance Admin. All rights reserved.
+       &copy; 2026 Micro Finance v1. All rights reserved.
     </div>
   </div>
 </template>

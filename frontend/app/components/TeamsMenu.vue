@@ -7,7 +7,7 @@ defineProps<{
 <template>
   <UButton
     icon="i-lucide-landmark"
-    :label="collapsed ? undefined : 'Microfinance'"
+    :label="collapsed ? undefined : 'Micro Finance v1'"
     color="neutral"
     variant="ghost"
     block
