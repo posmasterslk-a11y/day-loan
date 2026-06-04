@@ -68,4 +68,26 @@ class DashboardController extends Controller
             
         return response()->json($payments);
     }
+
+    public function notifications()
+    {
+        $payments = Payment::with(['loan.customer'])
+            ->orderBy('created_at', 'desc')
+            ->take(20)
+            ->get();
+            
+        $notifications = $payments->map(function ($payment) {
+            return [
+                'id' => $payment->id,
+                'unread' => false,
+                'sender' => [
+                    'name' => $payment->loan->customer->full_name ?? 'Unknown',
+                ],
+                'body' => "Paid Rs. {$payment->amount} for Loan {$payment->loan->loan_number}",
+                'date' => $payment->created_at->toISOString()
+            ];
+        });
+
+        return response()->json($notifications);
+    }
 }

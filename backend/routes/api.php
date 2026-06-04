@@ -69,6 +69,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/dashboard/stats', [DashboardController::class, 'stats']);
     Route::get('/dashboard/chart', [DashboardController::class, 'chart']);
+    Route::get('/notifications', [DashboardController::class, 'notifications']);
 
     Route::get('/arrears', [ArrearsController::class, 'index']);
 

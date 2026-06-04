@@ -3,8 +3,9 @@ import { formatTimeAgo } from '@vueuse/core'
 import type { Notification } from '~/types'
 
 const { isNotificationsSlideoverOpen } = useDashboard()
+const config = useRuntimeConfig()
 
-const { data: notifications } = await useApiFetch<Notification[]>('/api/notifications')
+const { data: notifications } = await useApiFetch<Notification[]>(`${config.public.apiBase}/notifications`)
 </script>
 
 <template>
