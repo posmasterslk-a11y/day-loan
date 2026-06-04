@@ -31,6 +31,7 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/user', [AuthController::class, 'user']);
+    Route::put('/profile', [UserController::class, 'updateProfile']);
 
     Route::get('/customers', [CustomerController::class, 'index']);
     Route::get('/customers/{id}', [CustomerController::class, 'show']);

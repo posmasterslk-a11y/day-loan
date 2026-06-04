@@ -2,48 +2,53 @@
 import * as z from 'zod'
 import type { FormSubmitEvent } from '@nuxt/ui'
 
-const fileRef = ref<HTMLInputElement>()
+const { user, setUser } = useAuth()
 
 const profileSchema = z.object({
-  name: z.string().min(2, 'Too short'),
+  name: z.string().min(2, 'Name is required'),
   email: z.string().email('Invalid email'),
-  username: z.string().min(2, 'Too short'),
-  avatar: z.string().optional(),
-  bio: z.string().optional()
+  password: z.string().min(6, 'Password must be at least 6 characters').optional().or(z.literal(''))
 })
 
 type ProfileSchema = z.output<typeof profileSchema>
 
 const profile = reactive<Partial<ProfileSchema>>({
-  name: 'Benjamin Canac',
-  email: 'ben@nuxtlabs.com',
-  username: 'benjamincanac',
-  avatar: undefined,
-  bio: undefined
+  name: user.value?.name || '',
+  email: user.value?.email || '',
+  password: ''
 })
+
 const toast = useToast()
+const config = useRuntimeConfig()
+const api = useApi()
+
 async function onSubmit(event: FormSubmitEvent<ProfileSchema>) {
-  toast.add({
-    title: 'Success',
-    description: 'Your settings have been updated.',
-    icon: 'i-lucide-check',
-    color: 'success'
-  })
-  console.log(event.data)
-}
-
-function onFileChange(e: Event) {
-  const input = e.target as HTMLInputElement
-
-  if (!input.files?.length) {
-    return
+  try {
+    const data = await api(`${config.public.apiBase}/profile`, {
+      method: 'PUT',
+      body: event.data
+    })
+    
+    // Update local user state
+    setUser(data)
+    
+    toast.add({
+      title: 'Success',
+      description: 'Your profile has been updated.',
+      icon: 'i-lucide-check',
+      color: 'success'
+    })
+    
+    // Clear password field after successful update
+    profile.password = ''
+  } catch (error: any) {
+    toast.add({
+      title: 'Error',
+      description: error.data?.message || 'Failed to update profile',
+      icon: 'i-lucide-alert-circle',
+      color: 'error'
+    })
   }
-
-  profile.avatar = URL.createObjectURL(input.files[0]!)
-}
-
-function onFileClick() {
-  fileRef.value?.click()
 }
 </script>
 
@@ -99,58 +104,15 @@ function onFileClick() {
       </UFormField>
       <USeparator />
       <UFormField
-        name="username"
-        label="Username"
-        description="Your unique username for logging in and your profile URL."
-        required
+        name="password"
+        label="New Password"
+        description="Leave blank if you don't want to change your password."
         class="flex max-sm:flex-col justify-between items-start gap-4"
       >
         <UInput
-          v-model="profile.username"
-          type="username"
-          autocomplete="off"
-        />
-      </UFormField>
-      <USeparator />
-      <UFormField
-        name="avatar"
-        label="Avatar"
-        description="JPG, GIF or PNG. 1MB Max."
-        class="flex max-sm:flex-col justify-between sm:items-center gap-4"
-      >
-        <div class="flex flex-wrap items-center gap-3">
-          <UAvatar
-            :src="profile.avatar"
-            :alt="profile.name"
-            size="lg"
-          />
-          <UButton
-            label="Choose"
-            color="neutral"
-            @click="onFileClick"
-          />
-          <input
-            ref="fileRef"
-            type="file"
-            class="hidden"
-            accept=".jpg, .jpeg, .png, .gif"
-            @change="onFileChange"
-          >
-        </div>
-      </UFormField>
-      <USeparator />
-      <UFormField
-        name="bio"
-        label="Bio"
-        description="Brief description for your profile. URLs are hyperlinked."
-        class="flex max-sm:flex-col justify-between items-start gap-4"
-        :ui="{ container: 'w-full' }"
-      >
-        <UTextarea
-          v-model="profile.bio"
-          :rows="5"
-          autoresize
-          class="w-full"
+          v-model="profile.password"
+          type="password"
+          autocomplete="new-password"
         />
       </UFormField>
     </UPageCard>
