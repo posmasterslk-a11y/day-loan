@@ -252,8 +252,8 @@ async function approveLoan(id: number) {
             <div><span class="text-muted-foreground">Duration:</span> <span class="font-medium">{{ selectedLoan.term_days }} Days</span></div>
             <div><span class="text-muted-foreground">Daily Installment:</span> <span class="font-medium text-primary">{{ selectedLoan.daily_installment }}</span></div>
             <div class="col-span-2 border-b border-default my-2"></div>
-            <div><span class="text-muted-foreground">Issue Date:</span> <span class="font-medium">{{ new Date(selectedLoan.created_at).toLocaleDateString() }}</span></div>
-            <div><span class="text-muted-foreground">Issue Time:</span> <span class="font-medium">{{ new Date(selectedLoan.created_at).toLocaleTimeString() }}</span></div>
+            <div><span class="text-muted-foreground">Issue Date:</span> <span class="font-medium">{{ new Date(selectedLoan.start_date).toLocaleDateString() }}</span></div>
+            <div><span class="text-muted-foreground">System Entry Time:</span> <span class="font-medium">{{ new Date(selectedLoan.created_at).toLocaleTimeString() }}</span></div>
           </div>
           <div class="flex justify-end mt-6">
             <UButton label="Close" color="neutral" variant="subtle" @click="isViewModalOpen = false" />
