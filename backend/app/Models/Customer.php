@@ -40,4 +40,9 @@ class Customer extends Model
             }
         });
     }
+
+    public function loans()
+    {
+        return $this->hasMany(Loan::class);
+    }
 }
